@@ -1,0 +1,33 @@
+{% extends "common.html" %}
+
+{% block title %}Tasks for {{ day }}{% endblock %}
+
+{% block content %}
+<h1 style="color: white;">Tasks for {{ day }}</h1>
+
+
+<form method="POST">
+  {% csrf_token %}
+  <input type="text" name="task" placeholder="Add new task" required>
+  <button type="submit" class="btn btn-secondary">Add</button>
+  <button type="reset" class="btn btn-danger">Clear</button>
+
+</form>
+
+
+<form method="POST" class="mt-4">
+  {% csrf_token %}
+  <ul class="list-group">
+    {% for task in tasks %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ task.task }}
+        <input type="checkbox" name="check_{{ forloop.counter0 }}" onchange="this.form.submit()" {% if task.done %}checked{% endif %} />
+      </li>
+    {% empty %}
+      <li class="list-group-item">No tasks yet.</li>
+    {% endfor %}
+  </ul>
+</form>
+
+<a href="{% url 'landingPage' %}" class="btn btn-secondary mt-4">Back to Home</a>
+{% endblock %}
